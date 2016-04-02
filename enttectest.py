@@ -25,12 +25,14 @@ def pulse():
 	while True:
 		for i in range(0, 255, 5):
 			print(i)
-			dmx.sendDMX([i, i, 0, i, i])
+			dmx.setMultipleChannels([i, i, i, i, i])
+			dmx.render()
 			time.sleep(0.01)
 		for i in range(255, 1, -5):
 			print(i)
-			dmx.sendDMX([i, i, i, 0, i])
-			# time.sleep(0.01)
+			dmx.setMultipleChannels([i, i, i, i, i])
+			dmx.render()
+			time.sleep(0.01)
 
 
 def get():
