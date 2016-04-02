@@ -228,8 +228,14 @@ class EnttecUsbDmxPro:
             return self.widget['SerialNumber']
 
 # DMX
-    def setChannel(self, channel, value):
+    def setChannel(self, channel, value, autoRender=True):
         self.dmxFrame[channel] = value
+        if autoRender:
+            self.render(upTo=channel)
+
+    def setMultipleChannels(self, valueList):
+        for channel, value in enumerate(valueList):
+            self.setChannel(channel, value)
 
     def render(self, upTo=None):
         # Sends an array of up to universe size by default or up to a a length to save time.
