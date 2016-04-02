@@ -20,14 +20,18 @@ if dport == -1:
 dmx.setPort(dport)
 dmx.connect()
 
+
 def pulse():
 	while True:
-		for i in range(0,256):
-			dmx.sendDMX([i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i])
+		for i in range(0, 255, 5):
+			print(i)
+			dmx.sendDMX([i, i, 0, i, i])
 			time.sleep(0.01)
-		for i in range(255,-1):
-			dmx.sendDMX([i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i])
-			time.sleep(0.01)
+		for i in range(255, 1, -5):
+			print(i)
+			dmx.sendDMX([i, i, i, 0, i])
+			# time.sleep(0.01)
+
 
 def get():
 	while True:

@@ -27,9 +27,12 @@ class EnttecUsbDmxPro:
         self.widget = {'SerialNumber': 0x0FFFFFFFF, 'UserParameters': {'FirmwareVersion': [0, 0], 'DMXBreak': 96, 'DMXMarkAfterBreak': 10, 'DMXRate': 40}}
 
         # Initialize the data requests variable
-        self.widget_event = {'SerialNumber': threading.Event(), 'UserParameters': threading.Event(), 'ThreadExit': threading.Event()}  
+        self.widget_event = {'SerialNumber': threading.Event(), 'UserParameters': threading.Event(), 'ThreadExit': threading.Event()}
         self.serial.port = ""
         self.dmxRX = {"status": 0, "frame": []}
+
+        self.univSize = 512
+        self.dmxFrame = [0] * self.univSize
 
         if sys.version_info > (3, 0):
             self.py2 = False
@@ -225,12 +228,23 @@ class EnttecUsbDmxPro:
             return self.widget['SerialNumber']
 
 # DMX
-    def sendDMX(self, channels):
-        # Sends an array of up to 512 channels
-        data = [0] + channels
+    def setChannel(self, channel, value):
+        self.dmxFrame[channel] = value
+
+    def render(self, upTo=None):
+        # Sends an array of up to universe size by default or up to a a length to save time.
+        if upTo:
+            data = [0] + self.dmxFrame[0:upTo]
+        else:
+            data = [0] + self.dmxFrame
         while len(data) < 25:
             data += [0]
         self.sendmsg(6, data)
+
+    def blackOut(self):
+        # Set all channels to 0 and render
+        self.dmxFrame = [0] * self.univSize
+        self.render()
 
 # RDM
     def getRecievedFrame(self):
