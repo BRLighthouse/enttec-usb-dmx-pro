@@ -95,7 +95,9 @@ class EnttecUsbDmxPro:
     def close(self):
         self.disconnect()
 
-    def sendmsg(self, label, message=[]):
+    def sendmsg(self, label, message=None):
+        if message is None:
+            message = []
         l = len(message)
         lm = l >> 8
         ll = l - (lm << 8)
