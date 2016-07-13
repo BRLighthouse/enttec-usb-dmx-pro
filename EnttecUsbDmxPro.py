@@ -20,7 +20,7 @@ import traceback
 class EnttecUsbDmxPro:
     # Constructor, destructors and globals
     def __init__(self):
-        self.serial = serial.Serial()
+        self.serial = serial.Serial(stopbits=2)
         self.debug = {'SerialBuffer': False, 'RXWarning': False}
 
         # Initialize the register. Note that DMXOutBreak and DMXMarkAfterBreak are in 10.67us units
